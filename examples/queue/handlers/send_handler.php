@@ -1,9 +1,15 @@
-<?
-class SendHandler {
-    function post() {
-        if (isset($_POST['payload']) && strlen(trim($_POST['payload'])) > 0) {
-            send_payload($_POST['payload']);
+<?php
+
+class SendHandler
+{
+    function post(ToroPHP_Request $request)
+    {
+        $payload = $request->getValue('post', 'payload');
+        
+        if (isset($payload) && strlen(trim($payload)) > 0) {
+            send_payload($payload);
         }
-        header("Location: /");
+        
+        header("Location: /examples/queue/");
     }
 }

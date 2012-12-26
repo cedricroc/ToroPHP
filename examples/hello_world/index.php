@@ -5,13 +5,12 @@ require("../../bootstrap.php");
 
 class HelloHandler
 {
-    function get(ToroRequest $request = null)
+    public function get(ToroPHP_Request $request = null)
     {
-      var_dump($request->getDatas());
       echo "Hello, world";
     }
     
-    function get_xhr()
+    public function get_xhr()
     {
         echo 'Test OK XHR';
     }
@@ -19,25 +18,17 @@ class HelloHandler
 
 class NotFound
 {
-    function get()
+    public function get()
     {
-        echo "DA NOT FOUND !";
+        echo 'NOT FOUND !';
     }
 }
 
 
 $routes = array(
     "/" => "HelloHandler",
-    "/:alpha/saumon/:number/" => "HelloHandler",
-    "/:number/" => "HelloHandler",
     "404" => "NotFound",
 );
 
-$server = array('REQUEST_METHOD'         => 'GET',
-                'PATH_INFO'              => '/',
-                'HTTP_X_REQUESTED_WITH'  => 'XMLHttpRequest',
-            );
-
-$request = new ToroRequest();
-$router = new Toro($routes, $request);
+$router = new ToroPHP_Toro($routes, new ToroPHP_Request());
 $router->serve();

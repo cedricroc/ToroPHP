@@ -8,15 +8,21 @@
  *
  * @link      https://github.com/cedricroc/ToroPHP
  * @license   MIT
+ * 
+ * @author Berker Peksag, Martin Bean, Robbie Coleman, and John Kurkowski for bug fixes and patches
+ * @author Danillo César de O. Melo for ToroHook
+ * @author Jason Mooberry for code optimizations and feedback
+ * @author Kunal Anand
  * @author Cédric ROCHART <cedric.rochart@gmail.com>
  */
 
+
 /**
- * ToroRequest main class.
+ * ToroPHP_Request main class.
  *
  * @author  Cédric ROCHART
  */
-class ToroRequest
+class ToroPHP_Request
 {
     
     private $_datas      = array();
@@ -26,17 +32,13 @@ class ToroRequest
     /**
      * Instantiate the request wrapper.
      *
-     * @param string $method Name of superglobal (ex : post, get, ...)
      * @param array $server Value to inject or override in $_SERVER
      */
-    public function __construct($method = 'get', $server = array())
+    public function __construct($server = array())
     {
-        $sMethod = '_' . ltrim(strtoupper($method), '_');
-        
-        if ($sMethod != '' && isset($GLOBALS[$sMethod])) {
-            
-            $this->_datas = $this->_cleanValue($GLOBALS[$sMethod]);
-        }
+        $this->_datas['get']       = $this->_cleanValue($_GET);
+        $this->_datas['post']      = $this->_cleanValue($_POST);
+        $this->_datas['cookie']    = $this->_cleanValue($_COOKIE);
         
         // Inject server value if exist
         $this->_server = array_merge($_SERVER, $server);
@@ -71,34 +73,38 @@ class ToroRequest
     /**
 	 * Return clean datas
 	 *
-	 * @return array
+	 * @param string $method  Possible value "get" (default), "post", "cookie"
+	 * @return array or null if $method doesn't exist
 	 */
-    public function getDatas()
+    public function getDatas($method = 'get')
     {
-        return $this->_datas;
+        return isset($this->_datas[$method]) ? $this->_datas[$method] : null;
     }
     
     
     /**
 	 * Add or init datas request
+	 * 
+	 * @param   string   $method   Possible value "get" (default), "post", "cookie"
+	 * @param   array    $datas    $datas is merged with $_datas
 	 */
-    public function setDatas($datas)
+    public function setDatas($method = 'get', $datas = array())
     {
-        $this->_datas = array_merge($this->_datas, $this->_cleanValue($datas));
+        $this->_datas[$method] = array_merge($this->_datas[$method], $this->_cleanValue($datas));
     }
     
     
     /**
 	 * Return an value by key
+	 * example : $_GET['foo'] => $this->getValue('get', 'foo');
 	 *
+	 * @param   string   $method   Possible value "get" (default), "post", "cookie"
 	 * @param string $key 
-	 * @return mixed
+	 * @return mixed or null if $method doesn't exist
 	 */
-    public function getValue($key = '')
+    public function getValue($method = 'get', $key = '')
     {
-        if(array_key_exists($key, $this->_datas)) return $this->_datas[$key];
-
-        return '';
+        return isset($this->_datas[$method]) && array_key_exists($key, $this->_datas[$method]) ? $this->_datas[$method][$key] : null;
     }
     
     

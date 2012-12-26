@@ -1,4 +1,20 @@
 <?php
+/**
+ * ToroPHP (https://github.com/cedricroc/ToroPHP)
+ * 
+ * Original project https://github.com/anandkunal/ToroPHP
+ * 
+ * ToroPHP is a small router framework.
+ *
+ * @link      https://github.com/cedricroc/ToroPHP
+ * @license   MIT
+ * 
+ * @author Berker Peksag, Martin Bean, Robbie Coleman, and John Kurkowski for bug fixes and patches
+ * @author Danillo César de O. Melo for ToroHook
+ * @author Jason Mooberry for code optimizations and feedback
+ * @author Kunal Anand
+ * @author Cédric ROCHART <cedric.rochart@gmail.com>
+ */
 
 require(dirname(dirname(__FILE__)) . '/bootstrapTest.php');
 
@@ -9,7 +25,7 @@ require(dirname(dirname(__FILE__)) . '/bootstrapTest.php');
 class ToroTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Toro
+     * @var ToroPHP_Toro
      */
     private $_request;
 
@@ -20,7 +36,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_request = new ToroRequest();
+        $this->_request = new ToroPHP_Request();
     }
     
 
@@ -39,27 +55,27 @@ class ToroTest extends PHPUnit_Framework_TestCase
      */
     public function testInitState()
     {
-        $o = new Toro();
+        $o = new ToroPHP_Toro();
         $this->assertFalse($o->initState());
         
-        $o = new Toro(array());
+        $o = new ToroPHP_Toro(array());
         $this->assertFalse($o->initState());
         
-        $o = new Toro(array(), $this->_request);
+        $o = new ToroPHP_Toro(array(), $this->_request);
         $this->assertFalse($o->initState());
         
-        $o = new Toro(array('/' => 'test'), $this->_request);
+        $o = new ToroPHP_Toro(array('/' => 'test'), $this->_request);
         $this->assertTrue($o->initState());
     }
     
     
     /**
-     * @covers Toro
+     * @covers ToroPHP_Toro
      * @runInSeparateProcess
      */
     public function testServeHeader404()
     {
-        $o = new Toro(array('/' => 'test'), $this->_request);
+        $o = new ToroPHP_Toro(array('/' => 'test'), $this->_request);
         
         $o->serve();
         $this->assertEquals(404, http_response_code());
@@ -67,7 +83,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
     
     
     /**
-     * @covers Toro
+     * @covers ToroPHP_Toro
      * @runInSeparateProcess
      */
     public function testServePage()
@@ -78,7 +94,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
         
         $route = array('/' => 'TestHandle');
         
-        $o = new Toro($route, new ToroRequest('get', $server));
+        $o = new ToroPHP_Toro($route, new ToroPHP_Request($server));
         
         ob_start();
         $o->serve();
@@ -89,7 +105,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Toro
+     * @covers ToroPHP_Toro
      * @runInSeparateProcess
      */
     public function testServeCustom404()
@@ -101,7 +117,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
         $route = array('404' => 'NotFound');
         
         
-        $o = new Toro($route, new ToroRequest('get', $server));
+        $o = new ToroPHP_Toro($route, new ToroPHP_Request($server));
         
         ob_start();
         $o->serve();
@@ -113,7 +129,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
     
     
     /**
-     * @covers Toro
+     * @covers ToroPHP_Toro
      * @runInSeparateProcess
      */
     public function testServePageXhr()
@@ -125,7 +141,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
         
         $route = array('/' => 'TestHandle');
         
-        $o = new Toro($route, new ToroRequest('get', $server));
+        $o = new ToroPHP_Toro($route, new ToroPHP_Request($server));
         
         ob_start();
         $o->serve();
@@ -137,7 +153,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
     
     
     /**
-     * @covers Toro
+     * @covers ToroPHP_Toro
      * @runInSeparateProcess
      */
     public function testServePageWithMask()
@@ -148,7 +164,7 @@ class ToroTest extends PHPUnit_Framework_TestCase
         
         $route = array('/:number/' => 'TestHandle');
         
-        $o = new Toro($route, new ToroRequest('get', $server));
+        $o = new ToroPHP_Toro($route, new ToroPHP_Request($server));
         
         ob_start();
         $o->serve();

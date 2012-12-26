@@ -8,16 +8,21 @@
  *
  * @link      https://github.com/cedricroc/ToroPHP
  * @license   MIT
+ * 
+ * @author Berker Peksag, Martin Bean, Robbie Coleman, and John Kurkowski for bug fixes and patches
+ * @author Danillo César de O. Melo for ToroHook
+ * @author Jason Mooberry for code optimizations and feedback
+ * @author Kunal Anand
  * @author Cédric ROCHART <cedric.rochart@gmail.com>
  */
 
 
 /**
- * Toro class route request
+ * ToroPHP_Toro class route request
  * 
  * @author Cédric ROCHART <cedric.rochart@gmail.com>
  */
-class Toro
+class ToroPHP_Toro
 {
     
     private $_routes                = array();
@@ -32,19 +37,19 @@ class Toro
     
     
     /**
-     * Init router with all routes of application and object ToroRequest
+     * Init router with all routes of application and object ToroPHP_Request
      * if object is correctly initialized $validObject containts true
      * false otherwise.
      * 
      * @param array $routes 
-     * @param ToroRequest $request
+     * @param ToroPHP_Request $request
      */
-    public function __construct($routes = array(), ToroRequest $request = null)
+    public function __construct($routes = array(), ToroPHP_Request $request = null)
     {
         if (    is_array($routes) && 
                 !empty($routes) && 
                 !is_null($request) && 
-                $request instanceof ToroRequest) {
+                $request instanceof ToroPHP_Request) {
             
             $this->_routes        = $routes;
             $this->_request       = $request;
@@ -57,7 +62,7 @@ class Toro
             if (!empty($pi)) {
                 
                 $this->_pathInfo = $pi;
-            }elseif (!empty($opi)) {
+            } elseif (!empty($opi)) {
                 
                 $this->_pathInfo = $opi;
             }
@@ -71,11 +76,11 @@ class Toro
      */
     public function serve()
     {
-        ToroHook::fire('before_request');
+        ToroPHP_Hook::fire('before_request');
         
         if ($this->_routeExiste() === true && $this->_callable() === true) {
             
-            ToroHook::fire('before_handler');
+            ToroPHP_Hook::fire('before_handler');
             
             $this->_addJSONHeader();
             
@@ -88,13 +93,13 @@ class Toro
                     $parameters['urlParameter_' . $counter] = $parameter[0];
                     $counter++;
                 }
-                $this->_request->setDatas($parameters);
+                $this->_request->setDatas('get', $parameters);
             }
             call_user_func(array($this->_handlerInstance, $this->_method), $this->_request);
             
-            ToroHook::fire('after_handler');
+            ToroPHP_Hook::fire('after_handler');
             
-            ToroHook::fire('after_request');
+            ToroPHP_Hook::fire('after_request');
         } else {
             
             $this->serve404();
@@ -204,7 +209,7 @@ class Toro
      */
     public function serve404()
     {
-        ToroHook::fire('404');
+        ToroPHP_Hook::fire('404');
         
         $this->_pathInfo = 404;
         if ($this->_routeExiste() === true && $this->_callable() === true) {

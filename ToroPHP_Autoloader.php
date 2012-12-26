@@ -16,25 +16,31 @@
  * @author Cédric ROCHART <cedric.rochart@gmail.com>
  */
 
-class TestHandle
+
+/**
+ * ToroPHP_Autoloader main class.
+ *
+ * @author  Cédric ROCHART
+ */
+class ToroPHP_Autoloader
 {
-    function get()
+
+    /**
+     * Handles autoloading of classes.
+     *
+     * @param   string  $class  class name
+     *
+     * @return  Boolean         true if the class has been loaded
+     */
+    static public function autoload($class)
     {
-        echo 'Test OK';
+        if (0 !== strpos($class, 'ToroPHP')) {
+            return;
+        }
+
+        if (file_exists($file = dirname(__FILE__) . '/' . str_replace('_', '/', $class) . '.php')) {
+            require $file;
+        }
     }
     
-    function get_xhr()
-    {
-        echo 'Test OK XHR';
-    }
 }
-
-class NotFound
-{
-    function get()
-    {
-        echo '404 NOT FOUND';
-    }
-}
-
-require(dirname(__FILE__) . '/bootstrap.php');

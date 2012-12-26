@@ -16,7 +16,19 @@
  * @author Cédric ROCHART <cedric.rochart@gmail.com>
  */
 
-require_once dirname(__FILE__) . '/ToroPHP_Autoloader.php';
-require_once dirname(__FILE__) . '/ToroPHP/hookPHP.php';
 
-spl_autoload_register(array(new ToroPHP_Autoloader, 'autoload'));
+if (!function_exists('_isset')) {
+
+    function _isset($val)
+    {
+        return isset($val);
+    }
+}
+
+if (!function_exists('_empty')) {
+
+    function _empty($val)
+    {
+        return empty($val);
+    }
+}
