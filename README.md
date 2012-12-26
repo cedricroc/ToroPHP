@@ -4,6 +4,8 @@ Toro is a PHP router for developing RESTful web applications and APIs. It is des
 
 ## Travis
 "!https://travis-ci.org/cedricroc/ToroPHP.png!":https://travis-ci.org/cedricroc/ToroPHP
+[![Build Status](https://travis-ci.org/cedricroc/ToroPHP.png)](https://travis-ci.org/cedricroc/ToroPHP)
+{<img src="https://travis-ci.org/cedricroc/ToroPHP.png" />}[https://travis-ci.org/cedricroc/ToroPHP]]
 
 ## Quick Links
 
