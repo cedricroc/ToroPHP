@@ -13,7 +13,7 @@ A very simple MySQL-backed queue written with Toro.
 
 ## Install
 
-1. Copy this directory to your server/virtual host root
-2. Grab a copy of `toro.php` from the repository and store in the `lib/` directory
+1. Copy /examples/* to your server/virtual host root
+2. Grab a copy of `ToroPHP` from the repository and store in the `lib/` directory
 3. Create a database called `toroqueue` and execute the `toroqueue.sql` dump
 4. Adjust your MySQL database/user information in `lib/mysql.php`
