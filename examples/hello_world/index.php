@@ -7,7 +7,7 @@ class HelloHandler
 {
     public function get(ToroPHP_Request $request = null)
     {
-      echo "Hello, world";
+        echo "Hello, world";
     }
     
     public function get_xhr()
@@ -23,7 +23,6 @@ class NotFound
         echo 'NOT FOUND !';
     }
 }
-
 
 $routes = array(
     "/" => "HelloHandler",
